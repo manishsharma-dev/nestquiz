@@ -1,11 +1,20 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  AfterInsert,
+  AfterUpdate,
+  BaseEntity,
+  BeforeRemove,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { UUID } from 'typeorm/driver/mongodb/bson.typings';
 
-@Entity('quizes')
+@Entity()
 export class Quiz extends BaseEntity {
   @PrimaryGeneratedColumn({
     comment: 'The quiz unique identifier',
   })
-  id: number;
+  id: UUID;
 
   @Column({
     type: 'varchar',
@@ -19,7 +28,22 @@ export class Quiz extends BaseEntity {
 
   @Column({
     type: 'boolean',
-    default: 1,
+    default: true,
   })
   isActive: boolean;
+
+  @AfterInsert()
+  onInsert() {
+    console.log(`User created with id: ${this.id}`);
+  }
+
+  @AfterUpdate()
+  onUpdate() {
+    console.log(`User updated with id: ${this.id}`);
+  }
+
+  @BeforeRemove()
+  onDelete() {
+    console.log(`User deleted with id: ${this.id}`);
+  }
 }

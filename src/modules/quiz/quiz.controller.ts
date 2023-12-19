@@ -3,6 +3,8 @@ import {
   Controller,
   Get,
   HttpCode,
+  Param,
+  Patch,
   Post,
   UsePipes,
   ValidationPipe,
@@ -16,7 +18,7 @@ export class QuizController {
 
   @Get('/')
   getAllQuiz() {
-    return this.quizService.getAllQuiz();
+    return this.quizService.fetchAllQuizes();
   }
 
   @Post('/')
@@ -24,5 +26,12 @@ export class QuizController {
   @UsePipes(ValidationPipe)
   async createQuiz(@Body() quizData: CreateQuizDto) {
     return await this.quizService.createNewQuiz(quizData);
+  }
+
+  @Patch('/:id')
+  @HttpCode(200)
+  @UsePipes(ValidationPipe)
+  async updateQuiz(@Param('id') id: string, @Body() quizData: CreateQuizDto) {
+    return this.quizService.update(+id, quizData);
   }
 }
